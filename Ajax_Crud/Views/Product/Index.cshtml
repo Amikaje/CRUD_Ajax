@@ -15,52 +15,14 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 
 <div class="container">
-    <button type="button" id="AddProduct" class="btn btn-outline-primary" data-toggle="modal" data-target="#form">
-        Add New Product
-    </button>
+
+    <button type="button" id="AddProduct" class="btn btn-outline-primary" data-toggle="modal" data-target="#form">Add New Product</button>
 
     @* List Product *@
-    <div id="ListProduct">
-
-    </div>
-
+    <div id="ListProduct"></div>
 </div>
 
-<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="text">Name Product :</label>
-                        <input class="form-control" value="" id="name" placeholder="Name Product">
-                        <span id="validate_name" class="text-danger" ></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="text">Price Product :</label>
-                        <input class="form-control" type="number" min="0" value="" id="price" placeholder="Price Product">
-                    </div>
-                    <div class="form-group">
-                        <label for="text">Quantity Product :</label>
-                        <input class="form-control" type="number" min="0" max="1000" value="" id="quantity" placeholder="Quantity Product">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer border-top-0 d-flex justify-content-center">
-                <button class="btn btn-secondary" data-dismiss="modal" id="cancel">Cancel</button>
-                <button id="save" class="btn btn-success">Submit</button>
-            </div>
-
-        </div>
-    </div>
-</div>
+<partial name="_Modal" />
 
 
 <script>
@@ -72,7 +34,7 @@
     // list product lấy từ partial view
     function ListPro() {
         $.ajax({
-            url: '/Product/ListProductPartial',
+            url: '/Product/_ListProduct',
             type: 'GET',
             dataType: 'html',
             success: (function (data) {
@@ -86,7 +48,6 @@
     $("#AddProduct").click(() => {
 
         //gán giá trị modal = rỗng
-        $("#exampleModalLabel").html("<h2> -- Add Product -- </h2>");
         var name = $("#name").val("");
         $("#price").val("");
         $("#quantity").val("");
@@ -96,19 +57,22 @@
         _id = 0;
 
         // title Modal
-        
+        $("#exampleModalLabel").html("<h2> -- Add Product -- </h2>");
     });
 
     $("#save").click(() => {
+
         // giá trị nhập vào từ modal
- 
         var name = $("#name").val();
         var price = $("#price").val();
         var quantity = $("#quantity").val();
 
+        //khi giá trị name nhập vào là rỗng
         if (name == "") {
             $("#validate_name").html("<p> Vui lòng nhập Name Product </p>");
-        } else {
+        }
+        else // ngược lại
+        {
             $("#validate_name").html("");
             // xử lí Add Or Update
             $.ajax({
@@ -120,22 +84,22 @@
                         id: _id,
                         name: name,
                         price: price,
-                        quantity: quantity,
+                        quantity: quantity
                     }
                 },
                 success: (function (data) {
                     // đóng modal
                     $("#form").modal('hide');
                     $("#cancel").click();
+
+                    alert("Add or Update Sussecc")
+
                     // auto load list
                     ListPro();
-                    console.log(data);
                 })
 
             });
         }
-      
-
 
     })
 

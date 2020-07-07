@@ -141,5 +141,5 @@ C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\zh-Hant\Mi
 C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.csproj.CoreCompileInputs.cache
 C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Razor\Views\Product\Index.cshtml.g.cs
-C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Razor\Views\Product\ListProductPartial.cshtml.g.cs
-C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.csprojAssemblyReference.cache
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Razor\Views\Product\_ListProduct.cshtml.g.cs
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Razor\Views\Product\_Modal.cshtml.g.cs

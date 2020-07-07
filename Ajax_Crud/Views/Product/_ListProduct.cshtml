@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Ajax_Crud.Models.Product>
+
+<table id="table" class="table table-striped">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Name</th>
+
+            <th>Price</th>
+            <th>Quantity</th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+            foreach (var m in Model)
+            {
+                    <tr>
+                        <td>@stt</td>
+                        <td class='name'>@m.name</td>
+                        <td class="price">@m.price</td>
+                        <td class="quantity">@m.quantity</td>
+                        <td class="id" hidden="hidden">@m.id</td>
+                        <td>
+                            <button id="detail" class="btn btn-outline-info">Detail</button>
+                            <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                            <button class="btn btn-outline-danger" onclick="Delete(@m.id)">Delete</button>
+                        </td>
+                    </tr>
+                   
+                stt++;
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    // biến toàn cục
+    var _id;
+
+    // click button update lấy giá trị của td tại table
+    $("#table").on('click', '#update', function () {
+        $("#exampleModalLabel").html("<h2> -- Update Product -- </h2>");
+        $("#validate_name").html("");
+
+        // lấy giá trị của row tr
+        var currentRow = $(this).closest("tr");
+
+        var name = currentRow.find(".name").html();
+        var price = currentRow.find(".price").html();
+        var quantity = currentRow.find(".quantity").html();
+        var id = currentRow.find(".id").html();
+
+        // gán giá trị của td vào modal
+        $("#name").val(name);
+        $("#price").val(price);
+        $("#quantity").val(quantity);
+        _id = id;
+    });
+
+
+    $("#table").on('click', '#detail', function () {
+
+        // lấy giá trị của row tr
+        var currentRow = $(this).closest("tr");
+
+        var name = currentRow.find(".name").html();
+        var price = currentRow.find(".price").html();
+        var quantity = currentRow.find(".quantity").html();
+
+        //// show giá trị
+        alert( "Name Product : " + name + "\n" + "Price Product : " + price + "\n" + "Quantity Product : " + quantity);
+
+    });
+
+
+    function Delete (id) {
+        // xoá giá trị tại vị trí id
+        $.ajax({
+            url: "/Product/DeleteProduct/" + id,
+            type: "POST",
+            dataType: 'json',
+            success: ((data) => {
+                // auto load list
+                alert("Delete Sussecc");
+                ListPro();
+            })
+        });
+    }
+
+</script>

@@ -22,7 +22,7 @@ namespace Ajax_Crud.Controllers
             return View();
         }
 
-        public PartialViewResult ListProductPartial()
+        public PartialViewResult _ListProduct()
         {
            var product = _productService.ListProduct();
             return PartialView(product);
@@ -31,22 +31,30 @@ namespace Ajax_Crud.Controllers
         [HttpPost]
         public JsonResult AddOrUpdate(Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (product.id == 0)
+                if (ModelState.IsValid)
                 {
-                    _productService.Add(product);
+                    if (product.id == 0)
+                    {
+                        _productService.Add(product);
+                    }
+                    else
+                    {
+                        _productService.Update(product);
+                    }
+                    return Json(product);
                 }
                 else
                 {
-                    _productService.Update(product);
+
+                    return Json(new { Code = 1, Message = "Lỗi gì" });
                 }
-                return Json(product);
             }
-            else
+            catch (Exception ex)
             {
 
-                return Json("Fail");
+                return Json(new { Code = -1, Message = ex });
             }
            
         } 
