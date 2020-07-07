@@ -31,14 +31,24 @@ namespace Ajax_Crud.Controllers
         [HttpPost]
         public JsonResult AddOrUpdate(Product product)
         {
-            if(product.id == 0){
-                _productService.Add(product);
+            if (ModelState.IsValid)
+            {
+                if (product.id == 0)
+                {
+                    _productService.Add(product);
+                }
+                else
+                {
+                    _productService.Update(product);
+                }
+                return Json(product);
             }
             else
             {
-                _productService.Update(product);
+
+                return Json("Fail");
             }
-            return Json(product);
+           
         } 
         
         [HttpPost]

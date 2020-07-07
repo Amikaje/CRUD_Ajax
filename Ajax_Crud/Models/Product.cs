@@ -14,7 +14,7 @@ namespace Ajax_Crud.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Require")]
         [MaxLength(50)]
         public string name { get; set; }
 
