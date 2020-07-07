@@ -11,13 +11,15 @@
     <body>
 
         <div class="container">
-            <button type="button" id="AddProduct" class="btn btn-primary" data-toggle="modal" data-target="#form">
+            <button type="button" id="AddProduct" class="btn btn-outline-primary" data-toggle="modal" data-target="#form">
                 Add New Product
             </button>
+
             @* List Product *@
             <div id="ListProduct">
 
             </div>
+
         </div>
 
         <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -59,7 +61,7 @@
         <script>
             // Auto Load ListProduct
             $(document).ready(function () {
-                ListPro();
+                ListPro();  
             });
 
             // list product lấy từ partial view
@@ -70,11 +72,12 @@
                     dataType: 'html',
                     success: (function (data) {
                         $("#ListProduct").html(data);
-                    })
+                    }),
+                    timeout: 1000
                 });
             }
 
-            // click button mở modal
+            // click button Add mở modal
             $("#AddProduct").click(() => {
 
                 //gán giá trị modal = rỗng 
@@ -82,7 +85,7 @@
                 $("#price").val("");
                 $("#quantity").val("");
 
-                // gán biến cục bộ = 0 để add
+                // gán biến cục bộ = 0 để thực hiện add
                 _id = 0;
 
                 // title Modal
@@ -116,21 +119,6 @@
                     })
                 });
             })
-
-            // hàm xử lí delete tại id
-            function DeleteById(id) {
-
-                $.ajax({
-                    url: "/Product/DeleteProduct/" + id,
-                    type: "POST",
-                    dataType: 'json',
-                    success: (function (data) {
-                        // auto load list
-                        ListPro();
-                    })
-                });
-
-            }
 
         </script>
 

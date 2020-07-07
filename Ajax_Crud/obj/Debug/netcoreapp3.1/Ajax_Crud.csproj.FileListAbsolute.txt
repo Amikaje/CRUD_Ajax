@@ -2,7 +2,6 @@ C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\bin\Debug\netcoreapp3.1\appsetting
 C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\bin\Debug\netcoreapp3.1\Ajax_Crud.exe
-C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.csprojAssemblyReference.cache
 C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.AssemblyInfoInputs.cache
 C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.AssemblyInfo.cs
 C:\Users\tan\source\repos\Ajax_Crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.RazorAssemblyInfo.cache

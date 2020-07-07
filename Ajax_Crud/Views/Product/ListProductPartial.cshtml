@@ -19,12 +19,9 @@
                     <td>@m.price</td>
                     <td>@m.quantity</td>
                     <td>
-                        <button id="update" class="btn btn-success" data-toggle="modal" data-target="#form">
-                            Update
-                        </button>
-                        <button onclick="DeleteById(@m.id)" class="btn btn-danger">
-                            Delete
-                        </button>
+                        <button id="detail" class="btn btn-outline-info">Detail</button>
+                        <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                        <button id="delete" class="btn btn-outline-danger">Delete</button>
                     </td>
                 </tr>
             } 
@@ -52,6 +49,40 @@
             $("#price").val(price);
             $("#quantity").val(quantity);
             _id = id;
+        });
+
+
+        $("#table").on('click', '#detail', function () {
+            // lấy giá trị của row tr
+            var currentRow = $(this).closest("tr");
+
+            var id = currentRow.find("td:eq(0)").text(); 
+            var name = currentRow.find("td:eq(1)").text(); 
+            var price = currentRow.find("td:eq(2)").text(); 
+            var quantity = currentRow.find("td:eq(3)").text(); 
+
+            // show giá trị
+            alert("Id : " + id + "\n" + "Name : " + name + "\n" + "Price : " + price + "\n" + "Quantity : " + quantity);
+
+        });
+
+
+        $("#table").on('click', '#delete', function () {
+            // lấy giá trị của row tr
+            var currentRow = $(this).closest("tr");
+
+            var id = currentRow.find("td:eq(0)").text(); // lấy giá trị của td tại vị trí thứ 0 là id 
+
+            // xoá giá trị tại vị trí id
+            $.ajax({
+                url: "/Product/DeleteProduct/" + id,
+                type: "POST",
+                dataType: 'json',
+                success: ((data)=> {
+                    // auto load list
+                    ListPro();
+                })
+            });
         });
 
     </script>

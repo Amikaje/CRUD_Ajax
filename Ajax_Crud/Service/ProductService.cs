@@ -20,11 +20,6 @@ namespace Ajax_Crud.Service
             return _db.Product.Where(x=> x.status == true).ToList();
         }
 
-        //public Product GetById(int id)
-        //{
-        //    return _db.Product.FirstOrDefault(x => x.id == id);
-        //}
-
         public void Add(Product product)
         {
             product.status = true;
