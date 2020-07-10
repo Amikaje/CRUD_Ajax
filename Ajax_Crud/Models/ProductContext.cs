@@ -12,6 +12,9 @@ namespace Ajax_Crud.Models
         {
 
         }
+
         public DbSet<Product> Product { get; set; }
+        public DbSet<ProductViewModel> ProductViewModel { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ajax_Crud.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,14 @@ namespace Ajax_Crud.Service
             _db = db;
         }
 
-        public List<Product> ListProduct()
+        public List<Product> ListProduct(string Keyword,int Top, int Page)
         {
-            return _db.Product.Where(x=> x.status == true).ToList();
+            return _db.Product.FromSqlRaw("SP_GetProductsByFilter @p0, @p1, @p2", Keyword, Top, Page).ToList();
         }
 
         public void Add(Product product)
         {
-            product.status = true;
+             product.status = true;
             _db.Product.Add(product);
             _db.SaveChanges();
         }
@@ -39,11 +40,17 @@ namespace Ajax_Crud.Service
 
         public void Delete(int id)
         {
+
             var pro = _db.Product.FirstOrDefault(x => x.id == id);
             pro.status = false;
             _db.Product.Update(pro);
             _db.SaveChanges();
         }
-       
+
+        public int CountProduct()
+        {
+            var list = _db.Product.Where(x => x.status==true).ToList();
+            return list.Count();
+        }
     }
 }

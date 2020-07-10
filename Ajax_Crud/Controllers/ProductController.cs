@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ajax_Crud.Models;
 using Ajax_Crud.Service;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace Ajax_Crud.Controllers
 {
@@ -22,9 +23,39 @@ namespace Ajax_Crud.Controllers
             return View();
         }
 
-        public PartialViewResult _ListProduct()
+        public PartialViewResult _ListProduct(string Keyword, int Top,int Page)
         {
-           var product = _productService.ListProduct();
+            if (Keyword == null)
+            {
+                Keyword = string.Empty;
+            }
+            else
+            {
+                Đ
+            }
+            
+            var totalPage = 0;
+            var product = _productService.ListProduct(Keyword,Top,Page);
+            var totalRow = _productService.CountProduct();
+            
+            if (product.Any())
+            {
+                totalPage = (int)Math.Ceiling((float)totalRow / Top);
+                
+            }
+            else
+            {
+                totalPage = (int)Math.Ceiling((float)totalRow / Top);
+                if (Page > totalPage)
+                {                   
+                    Page = 1;
+                    product = _productService.ListProduct(Keyword, Top, Page);
+                }
+            }
+            ViewBag.page = Page;
+            ViewBag.totalPage = totalPage;
+            ViewBag.totalRow = totalRow;
+
             return PartialView(product);
         }
 
@@ -47,7 +78,6 @@ namespace Ajax_Crud.Controllers
                 }
                 else
                 {
-
                     return Json(new { Code = 1, Message = "Lỗi gì" });
                 }
             }
@@ -63,7 +93,10 @@ namespace Ajax_Crud.Controllers
         public JsonResult DeleteProduct(int id)
         {
             _productService.Delete(id);
-            return Json("Success");
+            return Json("Delete Product Success");
         }
+
+
+       
     }
 }

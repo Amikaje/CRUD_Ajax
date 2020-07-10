@@ -1,11 +1,19 @@
 ﻿@model IEnumerable<Ajax_Crud.Models.Product>
 
+@{
+    int page = ViewBag.page;
+
+    int totalPage = ViewBag.totalPage;
+
+
+}
+<link rel="stylesheet" type="text/css" href="~/lib/dist/pagination.min.css">
+
 <table id="table" class="table table-striped">
     <thead>
         <tr>
             <th>STT</th>
             <th>Name</th>
-
             <th>Price</th>
             <th>Quantity</th>
 
@@ -17,25 +25,58 @@
             int stt = 1;
             foreach (var m in Model)
             {
-                    <tr>
-                        <td>@stt</td>
-                        <td class='name'>@m.name</td>
-                        <td class="price">@m.price</td>
-                        <td class="quantity">@m.quantity</td>
-                        <td class="id" hidden="hidden">@m.id</td>
-                        <td>
-                            <button id="detail" class="btn btn-outline-info">Detail</button>
-                            <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
-                            <button class="btn btn-outline-danger" onclick="Delete(@m.id)">Delete</button>
-                        </td>
-                    </tr>
-                   
+                <tr>
+                    <td>@stt</td>
+                    <td class='name'>@m.name</td>
+                    <td class="price">@m.price</td>
+                    <td class="quantity">@m.quantity</td>
+                    <td class="id" hidden="hidden">@m.id</td>
+                    <td>
+                        <button id="detail" class="btn btn-outline-info">Detail</button>
+                        <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                        <button class="btn btn-outline-danger" onclick="Delete(@m.id)">Delete</button>
+                    </td>
+                </tr>
+
                 stt++;
             }
         }
+
     </tbody>
 </table>
 
+@* Phân Trang 1 *@
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+
+        <li class="page-item @(page == 1 ? "disabled" : "" )">
+            <a class="page-link" data-dt-idx="1" tabindex="-1">First</a>
+        </li>
+        <li class="page-item  @(page == 1 ? "disabled" : "" )">
+            <a class="page-link" data-dt-idx="@(page-1)" tabindex="-1">Previous</a>
+        </li>
+        @for (int i = 1; i  <= totalPage; i++)
+        {
+            <li class="page-item @(page == i ? "active" : "")"><a class="page-link" data-dt-idx="@i">@i</a></li>
+        }
+        <li class="page-item @(page == totalPage ? "disabled" : "" )">
+            <a class="page-link" data-dt-idx="@(page+1)">Next</a>
+        </li>
+        <li class="page-item @(page == totalPage ? "disabled" : "" )">
+            <a class="page-link" data-dt-idx="@totalPage" tabindex="-1">Last</a>
+        </li>
+    </ul>
+</nav>
+
+@* Phân Trang 2 *@
+
+@*<ul id="example-2" class="pagination"></ul>
+<input type="type" hidden="hidden" value="@totalRow" id="totalRow" />*@
+
+
+
+<script type="text/javascript" src="~/lib/dist/pagination.min.js"></script>
 <script>
     // biến toàn cục
     var _id;
@@ -60,7 +101,31 @@
         _id = id;
     });
 
+    // Phân trang 1
+    $(".page-link").click(function () {
 
+        _page = $(this).attr("data-dt-idx");
+        ListPro();
+    })
+
+
+    // Phân trang 2
+    //$('#example-2').pagination({
+
+    //    total: $("#totalRow").val(), // totalRow
+    //    current: _page, // page
+    //    length: $("#selectTop").val(), // top
+    
+    //    prev: 'Previous',
+    //    next: 'Next',
+    //    click: function (options) {
+    //        _page = options.current;
+    //        ListPro();
+    //    }
+    //});
+
+
+    // lấy giá trị của tr show detail
     $("#table").on('click', '#detail', function () {
 
         // lấy giá trị của row tr
@@ -71,12 +136,16 @@
         var quantity = currentRow.find(".quantity").html();
 
         //// show giá trị
-        alert( "Name Product : " + name + "\n" + "Price Product : " + price + "\n" + "Quantity Product : " + quantity);
+        swal({
+            title: "-- Detai --",
+            text: "Name Product : " + name + "\n" + "Price Product : " + price + "\n" + "Quantity Product : " + quantity,
+            buttonsStyling: true,
+        })
 
     });
 
-
-    function Delete (id) {
+    // hàm xử lý delete
+    function Delete(id) {
         // xoá giá trị tại vị trí id
         $.ajax({
             url: "/Product/DeleteProduct/" + id,
@@ -84,10 +153,11 @@
             dataType: 'json',
             success: ((data) => {
                 // auto load list
-                alert("Delete Sussecc");
+                swal("Delete Product Success", "You clicked the button!", "success");
                 ListPro();
             })
         });
     }
 
 </script>
+

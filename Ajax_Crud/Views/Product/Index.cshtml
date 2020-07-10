@@ -1,4 +1,6 @@
-﻿@model Ajax_Crud.Models.Product
+﻿@model Ajax_Crud.Models.Product;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
 
 
 @{
@@ -10,22 +12,35 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-@* Validation  *@
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+<script src='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.min.js'></script>
+
 
 <div class="container">
 
-    <button type="button" id="AddProduct" class="btn btn-outline-primary" data-toggle="modal" data-target="#form">Add New Product</button>
+    @* Search *@
+    <label> Search: </label>
+    <input id="keyword" name="keyword" value="" type="text" />
+    <button onclick="ListPro()" type="button" id="btnSearch">Search</button>
 
-    @* List Product *@
+    <select onchange="ListPro()" id="selectTop">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+    </select>
+    <button type="button" id="AddProduct" class="btn btn-outline-primary" data-toggle="modal" data-target="#form">Add New Product</button>
     <div id="ListProduct"></div>
 </div>
 
 <partial name="_Modal" />
 
-
 <script>
+
+    var _page = 1;
+
     // Auto Load ListProduct
     $(document).ready(function () {
         ListPro();
@@ -33,14 +48,22 @@
 
     // list product lấy từ partial view
     function ListPro() {
+
+        var keyword = $("#keyword").val();
+        var top = $("#selectTop").val();
+
         $.ajax({
             url: '/Product/_ListProduct',
             type: 'GET',
+            data: {
+                Keyword: keyword,
+                Top: top,
+                Page: _page,
+            },
             dataType: 'html',
             success: (function (data) {
                 $("#ListProduct").html(data);
             }),
-            timeout: 1000
         });
     }
 
@@ -48,7 +71,7 @@
     $("#AddProduct").click(() => {
 
         //gán giá trị modal = rỗng
-        var name = $("#name").val("");
+        $("#Name").val("");
         $("#price").val("");
         $("#quantity").val("");
         $("#validate_name").html("");
@@ -87,15 +110,11 @@
                         quantity: quantity
                     }
                 },
-                success: (function (data) {
-                    // đóng modal
+                success: (function (data) {            
+                    swal("Add or Update Success", "You clicked the button!", "success");
                     $("#form").modal('hide');
                     $("#cancel").click();
-
-                    alert("Add or Update Sussecc")
-
-                    // auto load list
-                    ListPro();
+                    ListPro();     
                 })
 
             });
@@ -104,5 +123,4 @@
     })
 
 </script>
-
 

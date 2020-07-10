@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ajax_Crud.Models
 {
-    public class Product
+    public class ProductViewModel
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
-        [Required(ErrorMessage ="Require")]
-        [MaxLength(50)]
         public string name { get; set; }
 
         public int price { get; set; }
@@ -24,5 +17,6 @@ namespace Ajax_Crud.Models
 
         public bool status { get; set; }
 
+        public int TotalRow { get; set; }
     }
 }

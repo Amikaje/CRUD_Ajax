@@ -31,12 +31,10 @@ namespace Ajax_Crud.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("price")
-                        .HasColumnType("int")
-                        .HasMaxLength(10);
+                        .HasColumnType("int");
 
                     b.Property<int>("quantity")
-                        .HasColumnType("int")
-                        .HasMaxLength(4);
+                        .HasColumnType("int");
 
                     b.Property<bool>("status")
                         .HasColumnType("bit");
