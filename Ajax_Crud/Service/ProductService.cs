@@ -16,9 +16,9 @@ namespace Ajax_Crud.Service
             _db = db;
         }
 
-        public List<Product> ListProduct(string Keyword,int Top, int Page)
+        public List<ProductViewModel> ListProduct(string Keyword,int Top, int Page)
         {
-            return _db.Product.FromSqlRaw("SP_GetProductsByFilter @p0, @p1, @p2", Keyword, Top, Page).ToList();
+            return _db.ProductViewModel.FromSqlRaw("SP_GetProductsByFilter @p0, @p1, @p2", Keyword, Top, Page).ToList();
         }
 
         public void Add(Product product)
@@ -45,12 +45,6 @@ namespace Ajax_Crud.Service
             pro.status = false;
             _db.Product.Update(pro);
             _db.SaveChanges();
-        }
-
-        public int CountProduct()
-        {
-            var list = _db.Product.Where(x => x.status==true).ToList();
-            return list.Count();
         }
     }
 }

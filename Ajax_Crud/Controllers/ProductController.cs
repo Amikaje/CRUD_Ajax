@@ -23,35 +23,22 @@ namespace Ajax_Crud.Controllers
             return View();
         }
 
+        [HttpPost]
         public PartialViewResult _ListProduct(string Keyword, int Top,int Page)
         {
+            var totalRow = 0;
+            var totalPage = 0;
             if (Keyword == null)
             {
                 Keyword = string.Empty;
             }
-            else
-            {
-                Đ
-            }
-            
-            var totalPage = 0;
             var product = _productService.ListProduct(Keyword,Top,Page);
-            var totalRow = _productService.CountProduct();
             
-            if (product.Any())
-            {
+            if (product.Any()) {
+                totalRow = product.FirstOrDefault().TotalRow;
                 totalPage = (int)Math.Ceiling((float)totalRow / Top);
-                
             }
-            else
-            {
-                totalPage = (int)Math.Ceiling((float)totalRow / Top);
-                if (Page > totalPage)
-                {                   
-                    Page = 1;
-                    product = _productService.ListProduct(Keyword, Top, Page);
-                }
-            }
+
             ViewBag.page = Page;
             ViewBag.totalPage = totalPage;
             ViewBag.totalRow = totalRow;

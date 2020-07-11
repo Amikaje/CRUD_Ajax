@@ -1,11 +1,9 @@
-﻿@model IEnumerable<Ajax_Crud.Models.Product>
+﻿@model IEnumerable<Ajax_Crud.Models.ProductViewModel>
 
 @{
     int page = ViewBag.page;
-
     int totalPage = ViewBag.totalPage;
-
-
+    int totalRow = ViewBag.totalRow;
 }
 <link rel="stylesheet" type="text/css" href="~/lib/dist/pagination.min.css">
 
@@ -49,14 +47,13 @@
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-
         <li class="page-item @(page == 1 ? "disabled" : "" )">
             <a class="page-link" data-dt-idx="1" tabindex="-1">First</a>
         </li>
         <li class="page-item  @(page == 1 ? "disabled" : "" )">
             <a class="page-link" data-dt-idx="@(page-1)" tabindex="-1">Previous</a>
         </li>
-        @for (int i = 1; i  <= totalPage; i++)
+        @for (int i = 1; i <= totalPage; i++)
         {
             <li class="page-item @(page == i ? "active" : "")"><a class="page-link" data-dt-idx="@i">@i</a></li>
         }
@@ -69,10 +66,12 @@
     </ul>
 </nav>
 
-@* Phân Trang 2 *@
+ @*Phân Trang 2*@ 
 
 @*<ul id="example-2" class="pagination"></ul>
 <input type="type" hidden="hidden" value="@totalRow" id="totalRow" />*@
+
+@*<input type="type" id="totalSearch" value="@totalSearch" />*@
 
 
 
@@ -80,6 +79,8 @@
 <script>
     // biến toàn cục
     var _id;
+    var totalSearch = $("#totalSearch").val(); 
+
 
     // click button update lấy giá trị của td tại table
     $("#table").on('click', '#update', function () {
@@ -103,9 +104,8 @@
 
     // Phân trang 1
     $(".page-link").click(function () {
-
         _page = $(this).attr("data-dt-idx");
-        ListPro();
+        ListPro(_page);
     })
 
 
@@ -154,7 +154,7 @@
             success: ((data) => {
                 // auto load list
                 swal("Delete Product Success", "You clicked the button!", "success");
-                ListPro();
+                ListPro(_page);
             })
         });
     }

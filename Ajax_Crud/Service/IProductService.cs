@@ -8,12 +8,9 @@ namespace Ajax_Crud.Service
 {
     public interface IProductService
     {
-        List<Product> ListProduct(string Keyword,int Top,int Page);
-
-        int CountProduct();
+        List<ProductViewModel> ListProduct(string Keyword,int Top,int Page);
         void Add(Product product);
         void Update(Product product);
         void Delete(int id);
-        //List<Product> Search(string key);
     }
 }

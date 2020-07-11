@@ -24,9 +24,9 @@
     @* Search *@
     <label> Search: </label>
     <input id="keyword" name="keyword" value="" type="text" />
-    <button onclick="ListPro()" type="button" id="btnSearch">Search</button>
+    <button onclick="ListPro(1)" type="button" id="btnSearch">Search</button>
 
-    <select onchange="ListPro()" id="selectTop">
+    <select onclick="ListPro(1)" id="selectTop">
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -41,20 +41,13 @@
 
     var _page = 1;
 
-    // Auto Load ListProduct
-    $(document).ready(function () {
-        ListPro();
-    });
-
     // list product lấy từ partial view
-    function ListPro() {
-
+    function ListPro(_page) {
         var keyword = $("#keyword").val();
         var top = $("#selectTop").val();
-
         $.ajax({
             url: '/Product/_ListProduct',
-            type: 'GET',
+            type: 'POST',
             data: {
                 Keyword: keyword,
                 Top: top,
@@ -66,12 +59,15 @@
             }),
         });
     }
+    // Auto Load ListProduct
+    $(document).ready(ListPro(_page));
+
 
     // click button Add mở modal
     $("#AddProduct").click(() => {
 
         //gán giá trị modal = rỗng
-        $("#Name").val("");
+        $("#name").val("");
         $("#price").val("");
         $("#quantity").val("");
         $("#validate_name").html("");
@@ -110,11 +106,15 @@
                         quantity: quantity
                     }
                 },
-                success: (function (data) {            
-                    swal("Add or Update Success", "You clicked the button!", "success");
+                success: (function (data) {        
+                    if (_id == 0) {
+                        swal("Add  Success", "You clicked the button!", "success");
+                    } else {
+                        swal("Update Success", "You clicked the button!", "success");
+                    }
                     $("#form").modal('hide');
                     $("#cancel").click();
-                    ListPro();     
+                    ListPro(_page);     
                 })
 
             });
