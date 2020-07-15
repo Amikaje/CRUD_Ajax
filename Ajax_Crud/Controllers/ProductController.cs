@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Ajax_Crud.Models;
@@ -24,22 +25,29 @@ namespace Ajax_Crud.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult _ListProduct(string Keyword, int Top,int Page)
+        public PartialViewResult _ListProduct(ObjectProduct objectProduct)
         {
-            var totalRow = 0;
-            var totalPage = 0;
-            if (Keyword == null)
+            // khi load FirstDate = null
+            if (objectProduct.FirstDate == null)
             {
-                Keyword = string.Empty;
+                objectProduct.FirstDate = DateTime.Now.AddYears(-1);
             }
-            var product = _productService.ListProduct(Keyword,Top,Page);
-            
-            if (product.Any()) {
-                totalRow = product.FirstOrDefault().TotalRow;
-                totalPage = (int)Math.Ceiling((float)totalRow / Top);
+            // khi load Keyword = null
+            if (objectProduct.Keyword == null)
+            {
+                objectProduct.Keyword = string.Empty;
             }
 
-            ViewBag.page = Page;
+            var product = _productService.ListProduct(objectProduct);
+            var totalRow = 0;
+            var totalPage = 0;
+
+            if (product.Any()) {
+                totalRow = product.FirstOrDefault().TotalRow;
+                totalPage = (int)Math.Ceiling((float)totalRow / objectProduct.Top);
+            }
+             
+            ViewBag.page = objectProduct.Page;
             ViewBag.totalPage = totalPage;
             ViewBag.totalRow = totalRow;
 
@@ -53,7 +61,7 @@ namespace Ajax_Crud.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (product.id == 0)
+                    if (product.Id == 0)
                     {
                         _productService.Add(product);
                     }
@@ -65,7 +73,7 @@ namespace Ajax_Crud.Controllers
                 }
                 else
                 {
-                    return Json(new { Code = 1, Message = "Lỗi gì" });
+                    return Json(new { Code = 0, Message = "Error" });
                 }
             }
             catch (Exception ex)
@@ -74,16 +82,21 @@ namespace Ajax_Crud.Controllers
                 return Json(new { Code = -1, Message = ex });
             }
            
-        } 
-        
-        [HttpPost]
-        public JsonResult DeleteProduct(int id)
-        {
-            _productService.Delete(id);
-            return Json("Delete Product Success");
         }
 
 
-       
+        [HttpPost]
+        public JsonResult ActiveStatus(int Id)
+        {
+            try
+            {
+                _productService.ActiveStatus(Id);
+                return Json(new { Code = 1, Message = "Success" });
+            }
+            catch
+            {
+                return Json(new { Code = 0, Message = "Error" });
+            }
+        } 
     }
 }

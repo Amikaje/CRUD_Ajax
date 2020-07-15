@@ -4,160 +4,187 @@
     int page = ViewBag.page;
     int totalPage = ViewBag.totalPage;
     int totalRow = ViewBag.totalRow;
+    int dem = 0;
 }
-<link rel="stylesheet" type="text/css" href="~/lib/dist/pagination.min.css">
 
-<table id="table" class="table table-striped">
-    <thead>
-        <tr>
-            <th>STT</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int stt = 1;
-            foreach (var m in Model)
-            {
+<div class="container">
+    @* List *@
+    <div class="row">
+        <table id="table" class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@stt</td>
-                    <td class='name'>@m.name</td>
-                    <td class="price">@m.price</td>
-                    <td class="quantity">@m.quantity</td>
-                    <td class="id" hidden="hidden">@m.id</td>
-                    <td>
-                        <button id="detail" class="btn btn-outline-info">Detail</button>
-                        <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
-                        <button class="btn btn-outline-danger" onclick="Delete(@m.id)">Delete</button>
-                    </td>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Created Date</th>
+                    <th></th>
                 </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = 1;
+                    foreach (var m in Model)
+                    {
+                        <tr>
+                            <td>@stt</td>
+                            <td class='Name'>@m.Name</td>
+                            <td class="Price">@m.Price</td>
+                            <td class="Quantity">@m.Quantity</td>
+                            <td class="Createdate">@m.Createdate</td>
+                            <td class="Id" hidden="hidden">@m.Id</td>
+                            <td class="Status" hidden="hidden">@m.Status</td>
+                            <td>
+                                @switch (m.Status)
+                                {
+                                    case 1:
+                                        // Active
+                                        <button id="detail" class="btn btn-outline-info">Detail</button>
+                                        <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                                        <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">Block</button>
+                                        <button class="btn btn-outline-danger" onclick="ActiveStatus(-@m.Id)">Delete</button>
+                                        break;
+                                    case 0:
+                                        // Unblock
+                                        <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">UnBlock</button>;
+                                        break;
+                                    case -1:
+                                        // Delte
+                                        break;
+                                    default:
+                                        // Null
+                                        break;
+                                }
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @* Paging *@
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-2">
+            <lable><b>Page @(page) of @(totalPage)</b></lable>
+        </div>
+        <div class="col-5">
+            <ul class="pagination justify-content-right">
+                <li class="page-item @(page == 1 ? "disabled" : "" )">
+                    <a class="page-link" data-dt-idx="1" tabindex="-1">First</a>
+                </li>
+                <li class="page-item  @(page == 1 ? "disabled" : "" )">
+                    <a class="page-link" data-dt-idx="@(page-1)" tabindex="-1">Previous</a>
+                </li>
+                @for (int i = page - 2; i <= totalPage; i++)
+                {
+                    if (i > 0 && dem < 5)
+                    {
+                        <li class="page-item @(page == i ? "active" : "")"><a class="page-link" data-dt-idx="@i">@i</a></li>
+                        dem++;
+                    }
+                }
+                <li class="page-item @(page == totalPage ? "disabled" : "" )">
+                    <a class="page-link" data-dt-idx="@(page+1)" tabindex="-1">Next</a>
+                </li>
+                <li class="page-item @(page == totalPage ? "disabled" : "" )">
+                    <a class="page-link" data-dt-idx="@totalPage" tabindex="-1">Last</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
 
-                stt++;
-            }
-        }
-
-    </tbody>
-</table>
-
-@* Phân Trang 1 *@
-
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        <li class="page-item @(page == 1 ? "disabled" : "" )">
-            <a class="page-link" data-dt-idx="1" tabindex="-1">First</a>
-        </li>
-        <li class="page-item  @(page == 1 ? "disabled" : "" )">
-            <a class="page-link" data-dt-idx="@(page-1)" tabindex="-1">Previous</a>
-        </li>
-        @for (int i = 1; i <= totalPage; i++)
-        {
-            <li class="page-item @(page == i ? "active" : "")"><a class="page-link" data-dt-idx="@i">@i</a></li>
-        }
-        <li class="page-item @(page == totalPage ? "disabled" : "" )">
-            <a class="page-link" data-dt-idx="@(page+1)">Next</a>
-        </li>
-        <li class="page-item @(page == totalPage ? "disabled" : "" )">
-            <a class="page-link" data-dt-idx="@totalPage" tabindex="-1">Last</a>
-        </li>
-    </ul>
-</nav>
-
- @*Phân Trang 2*@ 
-
-@*<ul id="example-2" class="pagination"></ul>
-<input type="type" hidden="hidden" value="@totalRow" id="totalRow" />*@
-
-@*<input type="type" id="totalSearch" value="@totalSearch" />*@
-
-
-
-<script type="text/javascript" src="~/lib/dist/pagination.min.js"></script>
 <script>
-    // biến toàn cục
-    var _id;
-    var totalSearch = $("#totalSearch").val(); 
-
-
-    // click button update lấy giá trị của td tại table
-    $("#table").on('click', '#update', function () {
-        $("#exampleModalLabel").html("<h2> -- Update Product -- </h2>");
-        $("#validate_name").html("");
-
-        // lấy giá trị của row tr
-        var currentRow = $(this).closest("tr");
-
-        var name = currentRow.find(".name").html();
-        var price = currentRow.find(".price").html();
-        var quantity = currentRow.find(".quantity").html();
-        var id = currentRow.find(".id").html();
-
-        // gán giá trị của td vào modal
-        $("#name").val(name);
-        $("#price").val(price);
-        $("#quantity").val(quantity);
-        _id = id;
-    });
-
-    // Phân trang 1
     $(".page-link").click(function () {
         _page = $(this).attr("data-dt-idx");
         ListPro(_page);
     })
 
-
-    // Phân trang 2
-    //$('#example-2').pagination({
-
-    //    total: $("#totalRow").val(), // totalRow
-    //    current: _page, // page
-    //    length: $("#selectTop").val(), // top
-    
-    //    prev: 'Previous',
-    //    next: 'Next',
-    //    click: function (options) {
-    //        _page = options.current;
-    //        ListPro();
-    //    }
-    //});
-
-
-    // lấy giá trị của tr show detail
     $("#table").on('click', '#detail', function () {
-
-        // lấy giá trị của row tr
-        var currentRow = $(this).closest("tr");
-
-        var name = currentRow.find(".name").html();
-        var price = currentRow.find(".price").html();
-        var quantity = currentRow.find(".quantity").html();
-
-        //// show giá trị
+        var Name = $(".Name").html();
+        var Price = $(".Price").html();
+        var Quantity = $(".Quantity").html();
+        var Createdate = $(".Createdate").html();
         swal({
-            title: "-- Detai --",
-            text: "Name Product : " + name + "\n" + "Price Product : " + price + "\n" + "Quantity Product : " + quantity,
+            title: " -- Detai Product -- ",
+            text: "Name Product : " + Name + "\n" + "Price Product : " + Price + "\n" + "Quantity Product : " + Quantity + "\n" + "Create Date : " + Createdate,
             buttonsStyling: true,
         })
 
     });
 
-    // hàm xử lý delete
-    function Delete(id) {
-        // xoá giá trị tại vị trí id
-        $.ajax({
-            url: "/Product/DeleteProduct/" + id,
-            type: "POST",
-            dataType: 'json',
-            success: ((data) => {
-                // auto load list
-                swal("Delete Product Success", "You clicked the button!", "success");
-                ListPro(_page);
-            })
-        });
+    $("#table").on('click', '#update', function () {
+        $("#exampleModalLabel").html("<h2> -- Update Product -- </h2>");
+        $("#validate_name").html("");
+
+        var Name = $(".Name").html();
+        var Price = $(".Price").html();
+        var Quantity = $(".Quantity").html();
+        var Id = $(".Id").html();
+
+        // gán giá trị của td vào modal
+        $("#Name").val(Name);
+        $("#Price").val(Price);
+        $("#Quantity").val(Quantity);
+        _id = Id;
+    });
+
+    function ActiveStatus(Id) {
+        var status = $(".Status").html();
+        var titleMessage;
+        switch (status)
+        {
+            case 1:
+                titleMessage = "Are you sure Block?";
+                break;
+            case 0:
+                titleMessage = "Are you sure Unblock?";
+                break;
+            case -1:
+                titleMessage = "Are you sure Delete?";
+                break;
+            default:
+                break;
+        }
+        swal({
+            title: titleMessage,
+            text: "You will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: [
+                'No, cancel it!',
+                'Yes, I am sure!'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: "/Product/ActiveStatus/" + Id,
+                    type: "POST",
+                    dataType: 'json',
+                    success: ((data) => {
+                        //alert(data.status);
+                        if (status == 1) {
+                            if (Id > 0) {
+                                swal("Block Product Success", "You clicked the button!", "success");
+                            } else {
+                                swal("Delete Product Success", "You clicked the button!", "success");
+                            }  
+                        }
+                        else{
+                            swal("UnBlock Product Success", "You clicked the button!", "success");
+                        }
+                        ListPro(1);
+                    })
+                });
+            } else {
+                swal("Cancelled", "Your imaginary file is safe :)", "error");
+            }
+        })
     }
 
+ 
 </script>
 

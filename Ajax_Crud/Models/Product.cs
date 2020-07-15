@@ -2,27 +2,24 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ajax_Crud.Models
 {
-    public class Product
+    public partial class Product
     {
         [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-
-        [Required(ErrorMessage ="Require")]
-        [MaxLength(50)]
-        public string name { get; set; }
-
-        public int price { get; set; }
-
-        public int quantity { get; set; }
-
-        public bool status { get; set; }
-
+        [Column("id")]
+        public int Id { get; set; }
+        [Column("name")]
+        [StringLength(50)]
+        public string Name { get; set; }
+        [Column("price")]
+        public int Price { get; set; }
+        [Column("quantity")]
+        public int Quantity { get; set; }
+        [Column("status")]
+        public short Status { get; set; }
+        [Column("createdate", TypeName = "datetime")]
+        public DateTime Createdate { get; set; }
     }
 }

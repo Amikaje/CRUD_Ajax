@@ -156,3 +156,10 @@ C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\X.PagedLis
 C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.csproj.CoreCompileInputs.cache
 C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\obj\Debug\netcoreapp3.1\Ajax_Crud.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\dotnet-ef.dll
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Configuration.dll
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Console.dll
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\tan\source\repos\ajax_crud\Ajax_Crud\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
