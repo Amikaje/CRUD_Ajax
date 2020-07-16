@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Ajax_Crud.Models;
 using Ajax_Crud.Service;
 using Microsoft.AspNetCore.Mvc;
-using X.PagedList;
 
 namespace Ajax_Crud.Controllers
 {
@@ -27,11 +26,6 @@ namespace Ajax_Crud.Controllers
         [HttpPost]
         public PartialViewResult _ListProduct(ObjectProduct objectProduct)
         {
-            // khi load FirstDate = null
-            if (objectProduct.FirstDate == null)
-            {
-                objectProduct.FirstDate = DateTime.Now.AddYears(-1);
-            }
             // khi load Keyword = null
             if (objectProduct.Keyword == null)
             {
@@ -49,7 +43,6 @@ namespace Ajax_Crud.Controllers
              
             ViewBag.page = objectProduct.Page;
             ViewBag.totalPage = totalPage;
-            ViewBag.totalRow = totalRow;
 
             return PartialView(product);
         }
@@ -83,8 +76,6 @@ namespace Ajax_Crud.Controllers
             }
            
         }
-
-
         [HttpPost]
         public JsonResult ActiveStatus(int Id)
         {

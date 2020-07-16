@@ -3,7 +3,6 @@
 @{
     int page = ViewBag.page;
     int totalPage = ViewBag.totalPage;
-    int totalRow = ViewBag.totalRow;
     int dem = 0;
 }
 
@@ -17,6 +16,7 @@
                     <th>Name</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Status</th>
                     <th>Created Date</th>
                     <th></th>
                 </tr>
@@ -26,37 +26,49 @@
                     int stt = 1;
                     foreach (var m in Model)
                     {
-                        <tr>
-                            <td>@stt</td>
-                            <td class='Name'>@m.Name</td>
-                            <td class="Price">@m.Price</td>
-                            <td class="Quantity">@m.Quantity</td>
-                            <td class="Createdate">@m.Createdate</td>
-                            <td class="Id" hidden="hidden">@m.Id</td>
-                            <td class="Status" hidden="hidden">@m.Status</td>
-                            <td>
-                                @switch (m.Status)
-                                {
-                                    case 1:
-                                        // Active
-                                        <button id="detail" class="btn btn-outline-info">Detail</button>
-                                        <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
-                                        <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">Block</button>
-                                        <button class="btn btn-outline-danger" onclick="ActiveStatus(-@m.Id)">Delete</button>
-                                        break;
-                                    case 0:
-                                        // Unblock
-                                        <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">UnBlock</button>;
-                                        break;
-                                    case -1:
-                                        // Delte
-                                        break;
-                                    default:
-                                        // Null
-                                        break;
-                                }
-                            </td>
-                        </tr>
+                  
+                                <tr>
+                                    <td>@stt</td>
+                                    <td class='Name'>@m.Name</td>
+                                    <td class="Price">@m.Price</td>
+                                    <td class="Quantity">@m.Quantity</td>
+                                    @if (m.Status == 1)
+                                    {
+                                        <td class="Status">Active</td>
+                                    }
+                                    else if (m.Status == 0)
+                                    {
+                                        <td class="Status">Block</td>
+                                    }
+                                    else if (m.Status == -1)
+                                    {
+                                        <td class="Status">Delete</td>
+                                    }
+                                    <td class="Createdate">@m.Createdate</td>
+                                    <td class="Id" hidden="hidden">@m.Id</td>
+
+                                    <td>
+                                        @switch (m.Status)
+                                        {
+                                            case 1:
+                                                // Active
+                                                <button id="detail" class="btn btn-outline-info">Detail</button>
+                                                <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                                                <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">Block</button>
+                                                <button class="btn btn-outline-danger" onclick="ActiveStatus(-@m.Id)">Delete</button>
+                                                break;
+                                            case 0:
+                                                // Unblock
+                                                <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                                                <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">UnBlock</button>;
+                                                <button class="btn btn-outline-danger" onclick="ActiveStatus(-@m.Id)">Delete</button>
+                                                break;
+                                            default:
+                                                // Delete
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
                         stt++;
                     }
                 }
@@ -91,9 +103,11 @@
                 <li class="page-item @(page == totalPage ? "disabled" : "" )">
                     <a class="page-link" data-dt-idx="@totalPage" tabindex="-1">Last</a>
                 </li>
+                
             </ul>
         </div>
         <div class="col-3"></div>
+        <input value="@totalPage" id="totalPage" hidden />
     </div>
 </div>
 
@@ -119,7 +133,6 @@
     $("#table").on('click', '#update', function () {
         $("#exampleModalLabel").html("<h2> -- Update Product -- </h2>");
         $("#validate_name").html("");
-
         var Name = $(".Name").html();
         var Price = $(".Price").html();
         var Quantity = $(".Quantity").html();
@@ -184,7 +197,5 @@
             }
         })
     }
-
- 
 </script>
 

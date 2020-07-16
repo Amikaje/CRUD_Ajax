@@ -31,30 +31,31 @@
             <input id="keyword" name="keyword" value="" type="text" />
             <button onclick="ListPro(1)" class="btn btn-outline-primary" type="button" id="btnSearch">Search</button>
         </div>
-        <div class="col-1">
-            <select onclick="ListPro(1)" id="selectTop" class="mySelect">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-            </select>
-        </div>
-        <div class="col-2">
+        <div class="col-3" style="text-align:center">
             <select onclick="ListPro(1)" id="selectStatus" class="mySelect">
+                <option value="2">All</option>
                 <option value="1">Active</option>
                 <option value="0">Block</option>
-                <option value="-1">Delete</option>
             </select>
         </div>
-        <div class="col-3">
-            <input class="datepicker1" id="FirstDate" value="" disabled placeholder="MM/dd/yyyy" width="200" />
-            <input class="datepicker2" id="LastDate" value="@DateTime.Now.ToString("MM/dd/yyyy")" disabled placeholder="MM/dd/yyyy" width="200" />
+        <div class="col-3" style="text-align:center">
+            <input class="datepicker1" id="FirstDate" value="@DateTime.Now.AddYears(-1).ToString("MM/dd/yyyy")" placeholder="MM/dd/yyyy" width="200" />
+            <input class="datepicker2" id="LastDate" value="@DateTime.Now.ToString("MM/dd/yyyy")" placeholder="MM/dd/yyyy" width="200" />  
         </div>
         <div class="col-2">
             <button type="button" onclick="ListPro(1)" class="btn btn-outline-primary">Seach Date</button>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-1">
+            <select onclick="ListPro(1)" id="selectTop" class="mySelect">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </select>
+        </div>  
+        <div class="col-9"></div>
+        <div class="col-2" style="text-align: right">
             <button type="button" id="AddProduct" class="btn btn-outline-primary" data-toggle="modal" data-target="#form">Add Product</button>
         </div>
     </div>
@@ -110,7 +111,6 @@
 
     // click button Add mở modal
     $("#AddProduct").click(() => {
-
         //gán giá trị modal = rỗng
         _id = 0;
         $("#Name").val("");
@@ -121,7 +121,7 @@
         $("#exampleModalLabel").html("<h2> -- Add Product -- </h2>");
     });
 
-    $("#save").click(() => {
+    $("#save").click(function () {
         // giá trị nhập vào từ modal
         var Name = $("#Name").val();
         var Price = $("#Price").val();
@@ -143,7 +143,6 @@
                     }
                 },
                 success: (function (data) {
-
                     if (_id == 0) {
                         swal("Add Success", "You clicked the button!", "success");
                     } else {
