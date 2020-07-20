@@ -43,6 +43,7 @@ namespace Ajax_Crud.Controllers
              
             ViewBag.page = objectProduct.Page;
             ViewBag.totalPage = totalPage;
+            ViewBag.totalRow = totalRow;
 
             return PartialView(product);
         }
@@ -52,36 +53,25 @@ namespace Ajax_Crud.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (_productService.AddOrUpdate(product) == false)
                 {
-                    if (product.Id == 0)
-                    {
-                        _productService.Add(product);
-                    }
-                    else
-                    {
-                        _productService.Update(product);
-                    }
-                    return Json(product);
+                    return Json(new {Code = 1, Message = "Tên không được trùng"});
                 }
-                else
-                {
-                    return Json(new { Code = 0, Message = "Error" });
-                }
+                 return Json(product);
             }
             catch (Exception ex)
             {
 
                 return Json(new { Code = -1, Message = ex });
             }
-           
         }
+
         [HttpPost]
-        public JsonResult ActiveStatus(int Id)
+        public JsonResult ActiveStatus(int Id, EProductStatus eProductStatus)
         {
             try
             {
-                _productService.ActiveStatus(Id);
+                _productService.ActiveStatus(Id, eProductStatus);
                 return Json(new { Code = 1, Message = "Success" });
             }
             catch

@@ -9,8 +9,7 @@ namespace Ajax_Crud.Service
     public interface IProductService
     {
         List<ProductViewModel> ListProduct(ObjectProduct objectProduct);
-        void Add(Product product);
-        void Update(Product product);
-        void ActiveStatus(int Id);
+        bool AddOrUpdate(Product product);
+        void ActiveStatus(int Id, EProductStatus eProductStatus);
     }
 }

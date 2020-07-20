@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Ajax_Crud.Models
 {
     public class ProductContext : DbContext
-    {
+    { 
         public ProductContext(DbContextOptions<ProductContext> options) : base(options)
         {
 

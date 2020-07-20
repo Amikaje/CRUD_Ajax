@@ -3,6 +3,7 @@
 @{
     int page = ViewBag.page;
     int totalPage = ViewBag.totalPage;
+    int totalRow = ViewBag.totalRow;
     int dem = 0;
 }
 
@@ -23,54 +24,54 @@
             </thead>
             <tbody>
                 @{
-                    int stt = 1;
-                    foreach (var m in Model)
-                    {
+                int stt = 1;
+                foreach (var m in Model)
+                {
                   
-                                <tr>
-                                    <td>@stt</td>
-                                    <td class='Name'>@m.Name</td>
-                                    <td class="Price">@m.Price</td>
-                                    <td class="Quantity">@m.Quantity</td>
-                                    @if (m.Status == 1)
-                                    {
-                                        <td class="Status">Active</td>
-                                    }
-                                    else if (m.Status == 0)
-                                    {
-                                        <td class="Status">Block</td>
-                                    }
-                                    else if (m.Status == -1)
-                                    {
-                                        <td class="Status">Delete</td>
-                                    }
-                                    <td class="Createdate">@m.Createdate</td>
-                                    <td class="Id" hidden="hidden">@m.Id</td>
+                    <tr>
+                        <td>@stt</td>
+                        <td class='Name'>@m.Name</td>
+                        <td class="Price">@m.Price</td>
+                        <td class="Quantity">@m.Quantity</td>
+                        @if (m.Status == 1)
+                        {
+                            <td>Active</td>
+                        }
+                        else if (m.Status == 0)
+                        {
+                            <td>Block</td>
+                        }
+                        else if (m.Status == -1)
+                        {
+                            <td>Delete</td>
+                        }
+                        <td class="Createdate">@m.Createdate</td>
+                        <td class="Id" hidden="hidden">@m.Id</td>
 
-                                    <td>
-                                        @switch (m.Status)
-                                        {
-                                            case 1:
-                                                // Active
-                                                <button id="detail" class="btn btn-outline-info">Detail</button>
-                                                <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
-                                                <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">Block</button>
-                                                <button class="btn btn-outline-danger" onclick="ActiveStatus(-@m.Id)">Delete</button>
-                                                break;
-                                            case 0:
-                                                // Unblock
-                                                <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
-                                                <button class="btn btn-outline-secondary" onclick="ActiveStatus(@m.Id)">UnBlock</button>;
-                                                <button class="btn btn-outline-danger" onclick="ActiveStatus(-@m.Id)">Delete</button>
-                                                break;
-                                            default:
-                                                // Delete
-                                                break;
-                                        }
-                                    </td>
-                                </tr>
-                        stt++;
-                    }
+                        <td>
+                            @switch (m.Status)
+                            {
+                                case 1:
+                                    // Active
+                                    <button id="detail" class="btn btn-outline-info">Detail</button>
+                                    <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                                    <button class="btn btn-outline-secondary" onclick="ActiveStatus('@m.Id', 'Block')">Block</button>
+                                    <button class="btn btn-outline-danger" onclick="ActiveStatus('@m.Id', 'Delete')">Delete</button>
+                                    break;
+                                case 0:
+                                    // Unblock
+                                    <button id="detail" class="btn btn-outline-info">Detail</button>
+                                    <button id="update" class="btn btn-outline-success" data-toggle="modal" data-target="#form">Update</button>
+                                    <button class="btn btn-outline-secondary" onclick="ActiveStatus('@m.Id', 'Active')">UnBlock</button>;
+                                    <button class="btn btn-outline-danger" onclick="ActiveStatus('@m.Id', 'Delete')">Delete</button>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </td>
+                    </tr>
+                    stt++;
+                }
                 }
             </tbody>
         </table>
@@ -112,31 +113,36 @@
 </div>
 
 <script>
+
+
+
     $(".page-link").click(function () {
         _page = $(this).attr("data-dt-idx");
         ListPro(_page);
     })
 
     $("#table").on('click', '#detail', function () {
-        var Name = $(".Name").html();
-        var Price = $(".Price").html();
-        var Quantity = $(".Quantity").html();
-        var Createdate = $(".Createdate").html();
+        var currentRow = $(this).closest("tr");
+        var Name = currentRow.find(".Name").html();
+        var Price = currentRow.find(".Price").html();
+        var Quantity = currentRow.find(".Quantity").html();
+        var Createdate = currentRow.find(".Createdate").html();
         swal({
             title: " -- Detai Product -- ",
             text: "Name Product : " + Name + "\n" + "Price Product : " + Price + "\n" + "Quantity Product : " + Quantity + "\n" + "Create Date : " + Createdate,
             buttonsStyling: true,
         })
-
     });
 
     $("#table").on('click', '#update', function () {
         $("#exampleModalLabel").html("<h2> -- Update Product -- </h2>");
         $("#validate_name").html("");
-        var Name = $(".Name").html();
-        var Price = $(".Price").html();
-        var Quantity = $(".Quantity").html();
-        var Id = $(".Id").html();
+
+        var currentRow = $(this).closest("tr");
+        var Name = currentRow.find(".Name").html();
+        var Price = currentRow.find(".Price").html();
+        var Quantity = currentRow.find(".Quantity").html();
+        var Id = currentRow.find(".Id").html();
 
         // gán giá trị của td vào modal
         $("#Name").val(Name);
@@ -145,23 +151,18 @@
         _id = Id;
     });
 
-    function ActiveStatus(Id) {
-        var status = $(".Status").html();
+    function ActiveStatus(Id, eProductStatus) {
         var titleMessage;
-        switch (status)
-        {
-            case 1:
-                titleMessage = "Are you sure Block?";
-                break;
-            case 0:
-                titleMessage = "Are you sure Unblock?";
-                break;
-            case -1:
-                titleMessage = "Are you sure Delete?";
-                break;
-            default:
-                break;
+        alert(@totalRow);
+
+        if (eProductStatus == "Delete") {
+            titleMessage = "Are you sure Delete ?"
+        } else if (eProductStatus == "Active") {
+            titleMessage = "Are you sure Unblock ?"
+        } else {
+            titleMessage = "Are you sure Block ?"
         }
+
         swal({
             title: titleMessage,
             text: "You will not be able to recover this imaginary file!",
@@ -175,21 +176,24 @@
             if (isConfirm) {
                 $.ajax({
                     url: "/Product/ActiveStatus/" + Id,
+                    data: {
+                        eProductStatus: eProductStatus
+                    },
                     type: "POST",
                     dataType: 'json',
                     success: ((data) => {
-                        //alert(data.status);
-                        if (status == 1) {
-                            if (Id > 0) {
-                                swal("Block Product Success", "You clicked the button!", "success");
-                            } else {
-                                swal("Delete Product Success", "You clicked the button!", "success");
-                            }  
+                        if (eProductStatus == "Delete") {
+                            swal("Delete Success", "You clicked the button!", "success");
+                            ListPro(1);
+                        } else if (eProductStatus == "Active") {
+                            swal("UnBlock Success", "You clicked the button!", "success");
+                            ListPro(@(page));
+                        } else {
+                            swal("Block Success", "You clicked the button!", "success");
+                            ListPro(@(page));
                         }
-                        else{
-                            swal("UnBlock Product Success", "You clicked the button!", "success");
-                        }
-                        ListPro(1);
+                        alert(@totalRow);
+
                     })
                 });
             } else {

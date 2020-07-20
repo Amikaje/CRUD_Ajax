@@ -19,81 +19,67 @@ namespace Ajax_Crud.Service
 
         public List<ProductViewModel> ListProduct(ObjectProduct objectProduct)
         {
-            return _db.ProductViewModel.FromSqlRaw("SP_GetProductsByFilter @p0, @p1, @p2, @p3, @p4, @p5",
-            objectProduct.Keyword, objectProduct.Top, objectProduct.Page, objectProduct.Status, objectProduct.FirstDate, objectProduct.LastDate).ToList();  
+            try
+            {
+                return _db.ProductViewModel.FromSqlRaw("SP_GetProductsByFilter @p0, @p1, @p2, @p3, @p4, @p5",
+                objectProduct.Keyword, objectProduct.Top, objectProduct.Page, objectProduct.Status, objectProduct.FirstDate, objectProduct.LastDate).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            
         }
 
-        public void Add(Product product)
+        public bool AddOrUpdate(Product product)
         {
             try
             {
-                product.Status = 1;
-                product.Createdate = DateTime.Now;
-
-                _db.Product.Add(product);
-                _db.SaveChanges();
-                _db.Dispose();
-            }
-            catch
-            {
-                
-            }
-
-
-        }
-
-        public void Update(Product product)
-        {
-            try
-            {
-                var pro = _db.Product.FirstOrDefault(x => x.Id == product.Id);
-                pro.Name = product.Name;
-                pro.Price = product.Price;
-                pro.Quantity = product.Quantity;
-
-                _db.Product.Update(pro);
-                _db.SaveChanges();
-                _db.Dispose();
-            }
-            catch { }
-           
-        }
-       
-        public void ActiveStatus(int Id)
-        {
-            if (Id > 0)
-            {
-                var pro = _db.Product.FirstOrDefault(x => x.Id == Id);
-                if (pro.Status == (int)EProductStatus.Block)
+                if(product.Id == 0)
                 {
-                    pro.Status = (int)EProductStatus.Active;
+                    if (_db.Product.Any(x => x.Name.ToLower().Equals(product.Name.ToLower())))
+                    {
+                        return false;
+                    }
+                    product.Status = 1;
+                    product.Createdate = DateTime.Now;
+                    _db.Product.Add(product);
                 }
                 else
                 {
-                    pro.Status = (int)EProductStatus.Block;
+                    var pro = _db.Product.FirstOrDefault(x => x.Id == product.Id);
+                    if (_db.Product.Any(x => x.Name.ToLower().Equals(product.Name.ToLower()) && pro.Name != product.Name ))
+                    {
+                        return false;
+                    }                 
+                    pro.Name = product.Name;
+                    pro.Price = product.Price;
+                    pro.Quantity = product.Quantity;
+                    _db.Product.Update(pro);
                 }
-                _db.Product.Update(pro);
+                _db.SaveChanges();
+                _db.Dispose();
+                return true;
             }
-            else
+            catch(Exception ex)
             {
-                Id = Id * (int)EProductStatus.Delete;
-                var pro2 = _db.Product.FirstOrDefault(x => x.Id == Id);
-                pro2.Status = (int)EProductStatus.Delete;
-                _db.Product.Update(pro2);
+                throw (ex);
             }
-                      
-            _db.SaveChanges();
-            _db.Dispose();
-            
+        }
+        public void ActiveStatus(int Id, EProductStatus eProductStatus)
+        {
+            try
+            {
+                var pro = _db.Product.FirstOrDefault(x => x.Id == Id);
+                pro.Status = (short)eProductStatus;
+                _db.Product.Update(pro);
+                _db.SaveChanges();
+                _db.Dispose();
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
         }
     }
-
-    enum EProductStatus
-    {
-        Delete = -1,
-        Block,
-        Active
-    }
 }
-
-// -1 : delete  , 0 = block , 1 unblock

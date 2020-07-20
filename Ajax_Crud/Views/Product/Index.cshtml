@@ -5,34 +5,15 @@
     ViewData["Title"] = "Product Ajax";
 
 }
-
-<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-<style>
-    select:not([multiple]) {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-position: right 50%;
-        background-repeat: no-repeat;
-        background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1"><path d="M4 8L0 4h8z"/></svg>');
-        padding: .5em;
-        padding-right: 1.5em
-    }
-
-    #mySelect {
-        border-radius: 20%;
-    }
-</style>
-
 <div class="container">
     <div class="row">
         <div class="col-4">
             <label><b>Search :</b></label>
             <input id="keyword" name="keyword" value="" type="text" />
-            <button onclick="ListPro(1)" class="btn btn-outline-primary" type="button" id="btnSearch">Search</button>
+            <button class="btn btn-outline-primary" type="button" id="btnSearch">Search</button>
         </div>
         <div class="col-3" style="text-align:center">
-            <select onclick="ListPro(1)" id="selectStatus" class="mySelect">
+            <select id="selectStatus" class="mySelect">
                 <option value="2">All</option>
                 <option value="1">Active</option>
                 <option value="0">Block</option>
@@ -43,12 +24,12 @@
             <input class="datepicker2" id="LastDate" value="@DateTime.Now.ToString("MM/dd/yyyy")" placeholder="MM/dd/yyyy" width="200" />  
         </div>
         <div class="col-2">
-            <button type="button" onclick="ListPro(1)" class="btn btn-outline-primary">Seach Date</button>
+            <button type="button" class="btn btn-outline-primary" id="btnSearchDate">Seach Date</button>
         </div>
     </div>
     <div class="row">
         <div class="col-1">
-            <select onclick="ListPro(1)" id="selectTop" class="mySelect">
+            <select id="selectTop" class="mySelect">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -61,19 +42,26 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div id="ListProduct"></div>
+            <div id="ListProduct">
+
+            </div>
         </div>
     </div>
 
 </div>
 <partial name="_Modal" />
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 
     // biến toàn cục
     var _id;
     var _page = 1;
+
+    $("#keyword").keypress(function (e) {
+        if (e.which == 13) {
+            ListPro(1);
+        }
+    });
 
     $('.datepicker1').datepicker({
         uiLibrary: 'bootstrap4'
@@ -81,6 +69,14 @@
     $('.datepicker2').datepicker({
         uiLibrary: 'bootstrap4'
     });
+
+    $("#selectTop, #selectStatus").change(function () {
+        ListPro(1)
+    })
+
+    $("#btnSearchDate, #btnSearch").click(function () {
+        ListPro(1)
+    })
 
     function ListPro(_page) {
         var keyword = $("#keyword").val();
@@ -143,16 +139,28 @@
                     }
                 },
                 success: (function (data) {
-                    if (_id == 0) {
-                        swal("Add Success", "You clicked the button!", "success");
+                    if (data.code == error.name_existed.Code) {
+                        $("#validate_name").text(error.name_existed.Message);
                     } else {
-                        swal("Update Success", "You clicked the button!", "success");
+                        if (_id == 0) {
+                            swal("Add Success", "You clicked the button!", "success");
+                        } else {
+                            swal("Update Success", "You clicked the button!", "success");
+                        }
+                        $("#form").modal('hide');
+                        ListPro(_page);
                     }
-                    $("#form").modal('hide');
-                    ListPro(_page);
                 })
             });
         }
+
+
     })
+    var error = {
+        name_existed: { Code: 1, Message: "Name Product Existed" }
+    }
+   
+   
 </script>
+
 
